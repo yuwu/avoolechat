@@ -1,6 +1,6 @@
 package com.avoole.im;
 
-import com.avoole.im.util.BuildConfig;
+import com.avoole.im.common.BuildConfig;
 import com.avoole.im.util.Timber;
 
 /**

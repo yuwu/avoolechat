@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="translucent">#00000000</color>
+    <color name="line">#ffeeeeee</color>
+    <color name="white">#ffffffff</color>
+
+    <color name="im_background">#ffeeeeee</color>
+    <color name="im_line">#ffeeeeee</color>
+
+    <!--im chat-->
+    <color name="background_gray1">#EBEBEB</color>
+    <color name="background_gray2">#E6E6E6</color>
+    <color name="background_gray3">#D4D4D4</color>
+    <color name="background_gray4">#EFEFF4</color>
+    <color name="line_btn">#BBBBBB</color>
+    <color name="text_gray1">#777777</color>
+    <color name="text_gray2">#767676</color>
+    <color name="text_blue1">#1173CB</color>
+    <color name="text_blue2">#1173CA</color>
+</resources>
