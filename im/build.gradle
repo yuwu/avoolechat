@@ -28,7 +28,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
     implementation 'com.squareup.sqlbrite3:sqlbrite:3.2.0'
     implementation project(':common')
 }

@@ -1,4 +1,4 @@
-package com.avoole.im.util;
+package com.avoole.common.util;
 
 
 import android.os.Build;

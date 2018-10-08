@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.avoole.im.Applog;
+import com.avoole.common.Applog;
 
 public class Database extends SQLiteOpenHelper {
     public static final String DB_NAME = "avooleim.db";
@@ -58,25 +58,25 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public static void createTable(SQLiteDatabase database) {
-        String user = "create table if not exists user ("
+        String user = "create table if not exists tbl_user ("
                 + "id text,"
                 + "nickname text,"
                 + "phone text,"
                 + "icon text"
                 + ")";
 
-        String group = "create table if not exists group ("
+        String group = "create table if not exists tbl_group ("
                 + "id text,"
                 + "name text"
                 + ")";
 
-        String group_member = "create table if not exists group_member ("
+        String group_member = "create table if not exists tbl_group_member ("
                 + "id integer primary key autoincrement,"
-                + "group text,"
-                + "user text"
+                + "group_id text,"
+                + "user_id text"
                 + ")";
 
-        String msg = "create table if not exists msg ("
+        String msg = "create table if not exists tbl_msg ("
                 + "id text,"
                 + "content text,"
                 + "from text,"
@@ -87,9 +87,9 @@ public class Database extends SQLiteOpenHelper {
                 + "type integer"
                 + ")";
 
-        String option = "create table if not exists msg ("
+        String option = "create table if not exists tbl_option ("
                 + "id integer primary key autoincrement,"
-                + "key text,"
+                + "name text,"
                 + "value text,"
                 + "extend text"
                 + ")";

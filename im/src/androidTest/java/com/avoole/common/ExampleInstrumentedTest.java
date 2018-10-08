@@ -1,4 +1,4 @@
-package com.avoole.im.util;
+package com.avoole.common;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.avoole.mm.common.test", appContext.getPackageName());
+        assertEquals("com.avoole.im.test", appContext.getPackageName());
     }
 }

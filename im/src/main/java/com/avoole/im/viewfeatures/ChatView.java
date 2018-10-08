@@ -1,10 +1,7 @@
-package com.avoole.im.presentation.viewfeatures;
+package com.avoole.im.viewfeatures;
 
 
 import com.avoole.im.ui.ChatInput;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 聊天界面的接口

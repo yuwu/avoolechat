@@ -1,4 +1,4 @@
-package com.avoole.im.wiget;
+package com.avoole.common.wiget;
 
 import android.content.Context;
 import android.graphics.Canvas;

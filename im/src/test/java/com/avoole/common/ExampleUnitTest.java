@@ -1,4 +1,4 @@
-package com.avoole.im;
+package com.avoole.common;
 
 import org.junit.Test;
 

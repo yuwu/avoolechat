@@ -29,9 +29,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.avoole.im.Applog;
+import com.avoole.common.Applog;
 import com.avoole.im.R;
-import com.avoole.im.presentation.viewfeatures.ChatView;
+import com.avoole.im.viewfeatures.ChatView;
 
 import java.util.ArrayList;
 import java.util.List;

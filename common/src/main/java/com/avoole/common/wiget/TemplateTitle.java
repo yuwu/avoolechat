@@ -1,4 +1,4 @@
-package com.avoole.im.wiget;
+package com.avoole.common.wiget;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.avoole.im.common.R;
-import com.avoole.im.util.DrawableUtil;
+import com.avoole.common.R;
+import com.avoole.common.util.DrawableUtil;
 import com.bumptech.glide.Glide;
 
 /**
