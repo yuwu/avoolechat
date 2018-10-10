@@ -33,4 +33,6 @@ dependencies {
     api 'jp.wasabeef:glide-transformations:2.0.2'
     api files('libs/netty-all-4.1.30.Final.jar')
     api files('libs/netty-all-4.1.30.Final-sources.jar')
+    api 'com.jakewharton:butterknife:8.8.1'
+    api 'org.greenrobot:eventbus:3.0.0'
 }

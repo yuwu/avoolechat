@@ -1,7 +1,6 @@
 package com.avoole.im.ui;
 
 import android.Manifest;
-import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -27,31 +26,23 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avoole.common.Applog;
-import com.avoole.common.util.Constants;
-import com.avoole.common.util.SoftKeyboardUtils;
 import com.avoole.im.R;
 import com.avoole.im.viewfeatures.ChatView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 聊天界面输入控件
- */
-public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClickListener {
-
-    private static final String TAG = "ChatInput";
+public class ChatKeyboard extends SoftHandleLayout implements TextWatcher, View.OnClickListener {
 
     private ImageButton btnAdd, btnVoice, btnKeyboard, btnEmotion, btnLoaction;
     private TextView btnSend;
     private EditText chatInputText;
     private boolean isSendVisible,isHoldVoiceBtn;
-    private InputMode inputMode = InputMode.NONE;
+    private ChatInput.InputMode inputMode = ChatInput.InputMode.NONE;
     private ChatView chatView;
     private LinearLayout morePanel,textPanel;
     private TextView voicePanel;
@@ -62,13 +53,14 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     private int fixMenuCount = 1;
 
-    public ChatInput(Context context, AttributeSet attrs) {
+    public ChatKeyboard(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflateView();
     }
 
     private void initView(){
         frame = findViewById(R.id.frame);
+        setAutoHeightLayoutView(frame);
 
         textPanel = (LinearLayout) findViewById(R.id.text_panel);
         btnAdd = (ImageButton) findViewById(R.id.btn_add);
@@ -116,7 +108,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    updateView(InputMode.TEXT);
+                    updateView(ChatInput.InputMode.TEXT);
                 }
             }
         });
@@ -132,74 +124,100 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         isSendVisible = chatInputText.getText().length() != 0;
         chatPanels = findViewById(R.id.panels);
 
-        frame.setVisibility(GONE);
         btnSend.setVisibility(View.GONE);
         morePanel.setVisibility(View.GONE);
         chatPanels.setVisibility(View.GONE);
     }
 
-    private void updateView(InputMode mode){
+    public class PagerModel<T> {
+        public static final int TYPE_EMOJI = 1;
+        public static final int TYPE_STICKER = 2;
+        /**
+         *
+         */
+        int type;
+        View itemView;
+        T object;
+
+        public PagerModel(int type, T object) {
+            this.type = type;
+            this.object = object;
+        }
+
+        public PagerModel(int type) {
+            this(type, null);
+        }
+
+        public T getObject(){
+            return object;
+        }
+    }
+
+    private void setSelector(int menuIndex){
+        switch (menuIndex){
+            case 0:
+                break;
+            default :{
+                break;
+            }
+        }
+    }
+
+    private void updateView(ChatInput.InputMode mode){
         if (mode == inputMode) return;
-        final InputMode currentState = inputMode;
+        final ChatInput.InputMode currentState = inputMode;
         leavingCurrentState(currentState);
+        hideAutoView();
         switch (inputMode = mode){
+            case MORE:
+                showAutoView();
+                closeSoftKeyboard(chatInputText);
+                morePanel.setVisibility(VISIBLE);
+                chatPanels.setVisibility(GONE);
+                break;
+            case TEXT:
+                if (chatInputText.requestFocus()){
+                    openSoftKeyboard(chatInputText);
+                    hideAutoView();
+                    chatPanels.setVisibility(GONE);
+                    morePanel.setVisibility(GONE);
+                }
+                break;
             case VOICE:
                 voicePanel.setVisibility(VISIBLE);
                 textPanel.setVisibility(GONE);
                 btnVoice.setVisibility(GONE);
                 btnKeyboard.setVisibility(VISIBLE);
                 break;
-            case TEXT:
-                SoftKeyboardUtils.showSoftInput(getActivity(), chatInputText);
-                if(currentState == InputMode.NONE){
-                    setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|
-                            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                    frame.setVisibility(GONE);
-                    chatPanels.setVisibility(GONE);
-                    morePanel.setVisibility(GONE);
-                }else{
-                    frame.setVisibility(VISIBLE);
-                    chatPanels.setVisibility(GONE);
-                    morePanel.setVisibility(GONE);
-                    postDelayed(new Runnable() {
+            case EMOTICON:
+                setSelector(1);
+                setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                if(currentState == ChatInput.InputMode.TEXT){
+                    post(new Runnable() {
                         @Override
                         public void run() {
-                            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|
-                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                            frame.setVisibility(GONE);
-                            chatPanels.setVisibility(GONE);
                             morePanel.setVisibility(GONE);
+                            chatPanels.setVisibility(VISIBLE);
                         }
-                    }, 250);
+                    });
+                }else{
+                    morePanel.setVisibility(GONE);
+                    chatPanels.setVisibility(VISIBLE);
                 }
-                break;
-            case EMOTICON:
-                //setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                updatePanelHeight(Constants.softKeyboardHeight);
-                frame.setVisibility(VISIBLE);
-                morePanel.setVisibility(GONE);
-                chatPanels.setVisibility(VISIBLE);
-                break;
-            case MORE:
-                setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                updatePanelHeight(Constants.softKeyboardHeight);
-                frame.setVisibility(View.VISIBLE);
-                chatPanels.setVisibility(GONE);
-                morePanel.setVisibility(VISIBLE);
                 break;
         }
         chatView.onInputModeChange(inputMode);
     }
 
-    private void leavingCurrentState(InputMode inputMode){
+    private void leavingCurrentState(ChatInput.InputMode inputMode){
         switch (inputMode){
             case TEXT:
-                SoftKeyboardUtils.hideSoftInput(getActivity());
+                View view = ((Activity) getContext()).getCurrentFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 chatInputText.clearFocus();
                 break;
             case MORE:
-                frame.setVisibility(GONE);
                 morePanel.setVisibility(GONE);
                 break;
             case VOICE:
@@ -209,7 +227,6 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 btnKeyboard.setVisibility(GONE);
                 break;
             case EMOTICON:
-                frame.setVisibility(GONE);
                 chatPanels.setVisibility(GONE);
                 break;
         }
@@ -324,7 +341,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
             chatView.sendText();
         }
         if (id == R.id.btn_add){
-            updateView(inputMode == InputMode.MORE ? InputMode.TEXT : InputMode.MORE);
+            updateView(inputMode == ChatInput.InputMode.MORE ? ChatInput.InputMode.TEXT : ChatInput.InputMode.MORE);
         }
         if (id == R.id.btn_photo){
             if(activity!=null && requestCamera(activity)){
@@ -338,11 +355,11 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         }
         if (id == R.id.btn_voice){
             if(activity!=null && requestAudio(activity)){
-                updateView(InputMode.VOICE);
+                updateView(ChatInput.InputMode.VOICE);
             }
         }
         if (id == R.id.btn_keyboard){
-            updateView(InputMode.TEXT);
+            updateView(ChatInput.InputMode.TEXT);
         }
         if (id == R.id.btn_video){
             if (getContext() instanceof FragmentActivity){
@@ -358,7 +375,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
             }
         }
         if (id == R.id.btnEmoticon){
-            updateView(inputMode == InputMode.EMOTICON? InputMode.TEXT: InputMode.EMOTICON);
+            updateView(inputMode == ChatInput.InputMode.EMOTICON? ChatInput.InputMode.TEXT: ChatInput.InputMode.EMOTICON);
         }
         if (id == R.id.btn_file){
             chatView.sendFile();
@@ -393,7 +410,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     /**
      * 设置输入模式
      */
-    public void setInputMode(InputMode mode){
+    public void setInputMode(ChatInput.InputMode mode){
         updateView(mode);
     }
 
@@ -473,7 +490,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     private View rootView;
 
     protected void inflateView() {
-        View layout = LayoutInflater.from(getContext()).inflate(R.layout.im_chat_input, this);
+        View layout = LayoutInflater.from(getContext()).inflate(R.layout.im_chat_input2, this);
         initView();
         final Context context = getContext();
         if (context instanceof Activity) {
@@ -481,7 +498,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         } else {
             rootView = this;
         }
-        detectSoftInput();
+        //detectSoftInput();
     }
 
     @Override
@@ -491,6 +508,68 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     private Activity getActivity(){
         return (Activity)getContext();
+    }
+
+    /**
+     * 获取软件盘的高度
+     * @return
+     */
+    private int getSupportSoftInputHeight() {
+        Rect r = new Rect();
+        /**
+         * decorView是window中的最顶层view，可以从window中通过getDecorView获取到decorView。
+         * 通过decorView获取到程序显示的区域，包括标题栏，但不包括状态栏。
+         */
+        getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+        //获取屏幕的高度
+        int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
+        //计算软件盘的高度
+        int softInputHeight = screenHeight - r.bottom;
+        /**
+         * 某些Android版本下，没有显示软键盘时减出来的高度总是144，而不是零，
+         * 这是因为高度是包括了虚拟按键栏的(例如华为系列)，所以在API Level高于20时，
+         * 我们需要减去底部虚拟按键栏的高度（如果有的话）
+         */
+        if (Build.VERSION.SDK_INT >= 20) {
+            // When SDK Level >= 20 (Android L), the softInputHeight will contain the height of softButtonsBar (if has)
+            softInputHeight = softInputHeight - getSoftButtonsBarHeight();
+        }
+        if (softInputHeight < 0) {
+            Applog.wtf("EmotionKeyboard--Warning: value of softInputHeight is below zero!");
+        }
+        return softInputHeight;
+    }
+    /**
+     * 底部虚拟按键栏的高度
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private int getSoftButtonsBarHeight() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        //这个方法获取可能不是真实屏幕的高度
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int usableHeight = metrics.heightPixels;
+        //获取当前屏幕的真实高度
+        getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        int realHeight = metrics.heightPixels;
+        if (realHeight > usableHeight) {
+            return realHeight - usableHeight;
+        } else {
+            return 0;
+        }
+    }
+
+    private int softInputHeight = 0;
+
+    /**
+     * 获取软键盘高度
+     * @return
+     */
+    private int getSoftInputHeight(){
+        if(softInputHeight == 0){
+            softInputHeight = getSupportSoftInputHeight();
+        }
+        return softInputHeight;
     }
 
     private void setSoftInputMode(int softInputMode) {
@@ -512,24 +591,55 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         }
     }
 
-    private void updatePanelHeight(int keyboardHeight) {
-        updatePanelHeight(morePanel, keyboardHeight);
-        updatePanelHeight(chatPanels, keyboardHeight);
-        updatePanelHeight(frame, keyboardHeight);
-    }
-
     private void detectSoftInput() {
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int keyboardHeight = SoftKeyboardUtils.getSoftKeyboardHeight(getActivity());
-                if(keyboardHeight > 0){
-                    Constants.setSoftKeyboardHeight(keyboardHeight);
-                    //updatePanelHeight(morePanel, keyboardHeight);
-                    //updatePanelHeight(chatPanels, keyboardHeight);
-                    updatePanelHeight(keyboardHeight);
+                int keyBoardHeight = getSoftInputHeight();
+                if(keyBoardHeight > 0){
+                    updatePanelHeight(morePanel, keyBoardHeight);
+                    updatePanelHeight(chatPanels, keyBoardHeight);
                 }
             }
         });
     }
+
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        switch (event.getKeyCode()) {
+//            case KeyEvent.KEYCODE_BACK:
+//                if (lyBottomLayout != null && lyBottomLayout.isShown()) {
+//                    hideAutoView();
+//                    btnEmoticon.setSelected(false);
+//                    return true;
+//                } else {
+//                    return super.dispatchKeyEvent(event);
+//                }
+//        }
+//        return super.dispatchKeyEvent(event);
+//    }
+
+    /**
+     * hide soft keyboard
+     */
+    public void hideKeyboard() {
+        hideAutoView();
+        closeSoftKeyboard(chatInputText);
+    }
+
+    /**
+     * pop soft keyboard, if the layout is hidden, it will show layout first
+     */
+    public void popKeyboard() {
+        openSoftKeyboard(chatInputText);
+        showAutoView();
+    }
+
+    public void del() {
+        int action = KeyEvent.ACTION_DOWN;
+        int code = KeyEvent.KEYCODE_DEL;
+        KeyEvent event = new KeyEvent(action, code);
+        chatInputText.onKeyDown(KeyEvent.KEYCODE_DEL, event);
+    }
+
 }
