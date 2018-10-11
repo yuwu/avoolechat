@@ -1,19 +1,15 @@
 package com.avoole.im.ui;
 
 import android.Manifest;
-import android.accessibilityservice.AccessibilityService;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -120,6 +115,15 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 }
             }
         });
+        chatInputText.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(inputMode == InputMode.TEXT && event.getAction() == MotionEvent.ACTION_UP){
+                    chatView.onInputModeChangeAlfter(inputMode);
+                }
+                return false;
+            }
+        });
         chatInputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -141,6 +145,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
     private void updateView(InputMode mode){
         if (mode == inputMode) return;
         final InputMode currentState = inputMode;
+        chatView.onInputModeChangeBefore(currentState);
         leavingCurrentState(currentState);
         switch (inputMode = mode){
             case VOICE:
@@ -148,15 +153,17 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 textPanel.setVisibility(GONE);
                 btnVoice.setVisibility(GONE);
                 btnKeyboard.setVisibility(VISIBLE);
+                chatView.onInputModeChangeAlfter(inputMode);
                 break;
             case TEXT:
                 SoftKeyboardUtils.showSoftInput(getActivity(), chatInputText);
-                if(currentState == InputMode.NONE){
+                if(currentState == InputMode.NONE || currentState == InputMode.VOICE){
                     setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|
                             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     frame.setVisibility(GONE);
                     chatPanels.setVisibility(GONE);
                     morePanel.setVisibility(GONE);
+                    chatView.onInputModeChangeAlfter(inputMode);
                 }else{
                     frame.setVisibility(VISIBLE);
                     chatPanels.setVisibility(GONE);
@@ -169,6 +176,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                             frame.setVisibility(GONE);
                             chatPanels.setVisibility(GONE);
                             morePanel.setVisibility(GONE);
+                            chatView.onInputModeChangeAlfter(inputMode);
                         }
                     }, 250);
                 }
@@ -180,6 +188,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 frame.setVisibility(VISIBLE);
                 morePanel.setVisibility(GONE);
                 chatPanels.setVisibility(VISIBLE);
+                chatView.onInputModeChangeAlfter(inputMode);
                 break;
             case MORE:
                 setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -187,9 +196,9 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
                 frame.setVisibility(View.VISIBLE);
                 chatPanels.setVisibility(GONE);
                 morePanel.setVisibility(VISIBLE);
+                chatView.onInputModeChangeAlfter(inputMode);
                 break;
         }
-        chatView.onInputModeChange(inputMode);
     }
 
     private void leavingCurrentState(InputMode inputMode){
@@ -307,6 +316,12 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
 
     public void deleteText() {
         int keyCode = KeyEvent.KEYCODE_DEL;
+        chatInputText.onKeyDown(keyCode, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
+        chatInputText.onKeyUp(keyCode, new KeyEvent(KeyEvent.ACTION_UP, keyCode));
+    }
+
+    public void requestPressText() {
+        int keyCode = KeyEvent.KEYCODE_UNKNOWN;
         chatInputText.onKeyDown(keyCode, new KeyEvent(KeyEvent.ACTION_DOWN, keyCode));
         chatInputText.onKeyUp(keyCode, new KeyEvent(KeyEvent.ACTION_UP, keyCode));
     }
@@ -523,6 +538,7 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
             @Override
             public void onGlobalLayout() {
                 int keyboardHeight = SoftKeyboardUtils.getSoftKeyboardHeight(getActivity());
+                Applog.d("keyboardHeight:" + keyboardHeight);
                 if(keyboardHeight > 0){
                     Constants.setSoftKeyboardHeight(keyboardHeight);
                     //updatePanelHeight(morePanel, keyboardHeight);

@@ -1,6 +1,8 @@
 package com.avoole.im.viewfeatures;
 
 
+import android.support.v7.widget.RecyclerView;
+
 import com.avoole.im.ui.ChatInput;
 
 /**
@@ -17,7 +19,9 @@ public interface ChatView extends MvpView {
      */
     void onInputText(CharSequence changedText, int start, int end);
 
-    void onInputModeChange(ChatInput.InputMode mode);
+    void onInputModeChangeBefore(ChatInput.InputMode oldMode);
+
+    void onInputModeChangeAlfter(ChatInput.InputMode newMode);
 
     /**
      * 显示消息

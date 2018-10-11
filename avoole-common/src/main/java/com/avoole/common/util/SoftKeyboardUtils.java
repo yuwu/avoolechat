@@ -26,6 +26,7 @@ public class SoftKeyboardUtils {
 
     public static void showSoftInput(Activity activity, EditText edt){
         edt.requestFocus();
+        edt.requestFocusFromTouch();
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edt, InputMethodManager.SHOW_IMPLICIT);
 

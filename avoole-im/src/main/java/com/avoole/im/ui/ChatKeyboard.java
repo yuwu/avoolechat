@@ -206,7 +206,6 @@ public class ChatKeyboard extends SoftHandleLayout implements TextWatcher, View.
                 }
                 break;
         }
-        chatView.onInputModeChange(inputMode);
     }
 
     private void leavingCurrentState(ChatInput.InputMode inputMode){
