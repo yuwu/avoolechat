@@ -33,8 +33,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:multidex:1.0.3'
-//    implementation 'com.android.support:appcompat-v7:26.1.0'
-//    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    //    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     // https://github.com/googlesamples/android-EmojiCompat
     // emoji >= android4.4
     implementation 'com.android.support:support-emoji:26.1.0'
@@ -51,4 +51,5 @@ dependencies {
     //compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'
     implementation project(':avoole-im')
     implementation project(':avoole-common')
+    implementation project(':wx')
 }

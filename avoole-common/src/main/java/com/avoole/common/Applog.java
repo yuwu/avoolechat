@@ -22,8 +22,24 @@ public class Applog {
         TAG = tag;
     }
 
+    public static void e(String tag, String message) {
+        Timber.e("[%s] %s", tag, message);
+    }
+
+    public static void d(String tag, String message) {
+        Timber.d("[%s] %s", tag, message);
+    }
+
+    public static void v(String tag, String message) {
+        Timber.v("[%s] %s", tag, message);
+    }
+
     public static void v(String format, Object... args) {
         Timber.v(format, args);
+    }
+
+    public static void w(String tag, String message) {
+        Timber.w("[%s] %s", tag, message);
     }
 
     public static void d(String format, Object... args) {

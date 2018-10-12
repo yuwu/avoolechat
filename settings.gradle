@@ -1,1 +1,1 @@
-include ':app', ':avoole-common', ':avoole-im'
+include ':app', ':avoole-common', ':avoole-im', ':wx'

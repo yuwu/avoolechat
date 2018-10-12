@@ -142,6 +142,18 @@ public class ChatInput extends RelativeLayout implements TextWatcher,View.OnClic
         chatPanels.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int keyboardHeight = SoftKeyboardUtils.getSoftKeyboardHeight(getActivity());
+        Applog.d("onMeasure:" + keyboardHeight + " heightSize:" + heightSize);
+    }
+
     private void updateView(InputMode mode){
         if (mode == inputMode) return;
         final InputMode currentState = inputMode;

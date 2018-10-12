@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/applekf/git/AVChat/wx/src/main/assets"/><source path="/Users/applekf/git/AVChat/wx/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/applekf/git/AVChat/wx/src/debug/assets"/></dataSet></merger>
