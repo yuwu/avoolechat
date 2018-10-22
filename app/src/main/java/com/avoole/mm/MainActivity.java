@@ -35,15 +35,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WxChattingActvity.class);
-
-//                UserContext context = new UserContext("1", SysUtil.getAppkey());
-//                intent.putExtra(UserContext.EXTRA_USER_CONTEXT_KEY, context);
-//                intent.putExtra("isMyComputerConv", true);
-//                intent.putExtra("extraUserId", "2");
-
-                LoginByIM.getInstance().showLogin(MainActivity.this);
-
+//                Intent intent = new Intent(MainActivity.this, WxChattingActvity.class);
                 //startActivity(intent);
             }
         });

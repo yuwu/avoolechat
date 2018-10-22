@@ -1,8 +1,5 @@
 package com.avoole.im.conversation;
 
-import com.alibaba.mobileim.channel.YWEnum.SendImageResolutionType;
-import com.alibaba.mobileim.contact.IYWContact;
-import com.alibaba.mobileim.conversation.YWMessageType.SendState;
 import java.io.Serializable;
 
 public abstract class YWMessage implements Serializable, IYWMessageModel {
@@ -15,7 +12,7 @@ public abstract class YWMessage implements Serializable, IYWMessageModel {
 
     public abstract String getConversationId();
 
-    public abstract SendState getHasSend();
+    //public abstract SendState getHasSend();
 
     public abstract String getAuthorUserId();
 
@@ -57,9 +54,9 @@ public abstract class YWMessage implements Serializable, IYWMessageModel {
 
     public abstract void setMsgReadStatus(int var1);
 
-    public abstract SendImageResolutionType getSendImageResolutionType();
+    //public abstract SendImageResolutionType getSendImageResolutionType();
 
-    public abstract void setPushInfo(YWPushInfo var1);
+    //public abstract void setPushInfo(YWPushInfo var1);
 
     public abstract void setIsLocal(boolean var1);
 
@@ -77,7 +74,7 @@ public abstract class YWMessage implements Serializable, IYWMessageModel {
 
     public abstract void setCustomMsgSubType(int var1);
 
-    public abstract void setMessageAuthor(IYWContact var1);
+    //public abstract void setMessageAuthor(IYWContact var1);
 
     public abstract void setLocalMessageUnreadCount(int var1);
 

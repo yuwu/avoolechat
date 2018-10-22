@@ -20,23 +20,23 @@ public abstract class YWConversation {
 
     public abstract YWConversationType getConversationType();
 
-    public abstract YWMessageSender getMessageSender();
+    //public abstract YWMessageSender getMessageSender();
 
-    public abstract YWMessageLoader getMessageLoader();
+    //public abstract YWMessageLoader getMessageLoader();
 
-    public abstract YWConversationBody getConversationBody();
+    //public abstract YWConversationBody getConversationBody();
 
-    public abstract void addUnreadChangeListener(IYWConversationUnreadChangeListener var1);
+    //public abstract void addUnreadChangeListener(IYWConversationUnreadChangeListener var1);
 
-    public abstract void removeUnreadChangeListener(IYWConversationUnreadChangeListener var1);
+    //public abstract void removeUnreadChangeListener(IYWConversationUnreadChangeListener var1);
 
     public abstract boolean hasUnreadAtMsg();
 
     public abstract YWMessage getLatestUnreadAtMsg();
 
-    public abstract void sendAtMsgReadAck(YWMessage var1, IWxCallback var2);
+    //public abstract void sendAtMsgReadAck(YWMessage var1, IWxCallback var2);
 
-    public abstract void sendAtMsgReadAckBatch(List<YWMessage> var1, IWxCallback var2);
+    //public abstract void sendAtMsgReadAckBatch(List<YWMessage> var1, IWxCallback var2);
 
     public abstract List<YWMessage> getAtMsgInConversation(String var1, int var2);
 
@@ -48,34 +48,31 @@ public abstract class YWConversation {
 
     public abstract void updateAtMsgsRead(List<YWMessage> var1, String var2);
 
-    public abstract void getAtMsgReadUnReadCount(List<YWMessage> var1, IWxCallback var2);
+    //public abstract void getAtMsgReadUnReadCount(List<YWMessage> var1, IWxCallback var2);
 
-    public abstract void getAtMsgReadUnReadCount(YWMessage var1, IWxCallback var2);
+    //public abstract void getAtMsgReadUnReadCount(YWMessage var1, IWxCallback var2);
 
-    /** @deprecated */
-    public abstract void getAtMsgReadUnreadList(YWMessage var1, IWxCallback var2);
-
-    public abstract void getAtMsgReadUnreadTribeMemberList(YWMessage var1, IWxCallback var2);
+    //public abstract void getAtMsgReadUnreadTribeMemberList(YWMessage var1, IWxCallback var2);
 
     public abstract String getLatestMessageAuthorId();
 
     public abstract String getLatestMessageAuthorAppKey();
 
-    public abstract void setMsgReadedStatusToServer(YWMessage var1, IWxCallback var2);
+    //public abstract void setMsgReadedStatusToServer(YWMessage var1, IWxCallback var2);
 
-    public abstract void setMsgReadedStatusToServer(List<YWMessage> var1, IWxCallback var2);
+    //public abstract void setMsgReadedStatusToServer(List<YWMessage> var1, IWxCallback var2);
 
-    public abstract void getMsgReadedStatusFromServer(YWMessage var1, IWxCallback var2);
+    //public abstract void getMsgReadedStatusFromServer(YWMessage var1, IWxCallback var2);
 
-    public abstract void getMsgReadedStatusFromServer(List<YWMessage> var1, IWxCallback var2);
+    //public abstract void getMsgReadedStatusFromServer(List<YWMessage> var1, IWxCallback var2);
 
-    public abstract YWConversationDraft createDraft();
+    //public abstract YWConversationDraft createDraft();
 
-    public abstract YWConversationDraft createDraft(String var1, long var2);
+    //public abstract YWConversationDraft createDraft(String var1, long var2);
 
-    public abstract YWConversationDraft getConversationDraft();
+    //public abstract YWConversationDraft getConversationDraft();
 
-    public abstract void setConversationDraft(YWConversationDraft var1);
+    //public abstract void setConversationDraft(YWConversationDraft var1);
 
     public abstract void saveDraft();
 

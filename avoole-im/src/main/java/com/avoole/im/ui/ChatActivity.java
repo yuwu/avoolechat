@@ -91,11 +91,15 @@ public class ChatActivity extends Activity implements ChatView {
                 .build();
     }
 
-
     class ChatAdapter extends RecyclerView.Adapter {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_left, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
             return new ChatViewHolder(view);
         }
 
@@ -121,7 +125,6 @@ public class ChatActivity extends Activity implements ChatView {
 
     @Override
     public void onInputText(CharSequence changedText, int start, int end) {
-
     }
 
     @Override

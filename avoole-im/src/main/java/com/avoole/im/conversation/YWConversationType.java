@@ -1,6 +1,6 @@
 package com.avoole.im.conversation;
 
-import com.alibaba.mobileim.channel.IMChannel;
+import com.avoole.im.BuildConfig;
 
 public enum YWConversationType
 {
@@ -50,9 +50,11 @@ public enum YWConversationType
             case 11:
             case 12:
             case 13:
-            case 14: } if (IMChannel.DEBUG.booleanValue()) {
-        throw new RuntimeException("请实现会话类型的int值转枚举值");
-    }
+            case 14:
+        }
+        if (BuildConfig.DEBUG) {
+            throw new RuntimeException("请实现会话类型的int值转枚举值");
+        }
         return unknow;
     }
 
